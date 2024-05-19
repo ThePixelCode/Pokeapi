@@ -98,8 +98,77 @@ impl crate::search::NamedSearch for PokemonSearch {
     }
 }
 
-impl PokemonSearch {
-    pub fn search(&self) -> Pokemon {
-        todo!()
+use std::sync;
+
+use crate::search::NamedSearch;
+impl crate::Search for PokemonSearch {
+    type Out = Pokemon;
+    async fn search(
+        &self,
+        store: sync::Arc<crate::store::Store>,
+    ) -> Result<Self::Out, crate::Errors> {
+        use serde_json::{from_str, to_string};
+        if self.get_option().is_none()
+            || self
+                .get_option()
+                .is_some_and(|op| *op == crate::search::SearchOption::None)
+        {
+            unimplemented!()
+        }
+
+        let mut pokemon_string = None;
+
+        {
+            let mutex = store.pokemon.lock().expect(
+                "Mutex is poisoned, which completly breaks the universe this app is suppose to work",
+            );
+
+            if let Some(id) = self.get_id() {
+                if mutex.contains_key(id) {
+                    pokemon_string = Some(mutex.get(id).expect("None is unreachable").clone());
+                }
+            }
+        }
+
+        if let Some(pokemon_string) = pokemon_string {
+            return Ok(from_str::<Pokemon>(&pokemon_string)?);
+        }
+
+        let pokemon = if let Some(id) = self.get_id() {
+            crate::search::get(format!("{}{}/{}", crate::POKEAPI_BASE_URL, POKEMON_URL, id)).await?
+        } else {
+            crate::search::get(format!(
+                "{}{}/{}",
+                crate::POKEAPI_BASE_URL,
+                POKEMON_URL,
+                self.get_name().expect("None should be unreachable")
+            ))
+            .await?
+        };
+
+        let pokemon = from_str::<Pokemon>(&pokemon)?;
+
+        {
+            let mut mutex = store.pokemon.lock().expect(
+                "Mutex is poisoned, which completly breaks the universe this app is suppose to work",
+            );
+            mutex.insert(pokemon.id, to_string(&pokemon)?);
+        }
+
+        Ok(pokemon)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn ensure_async() {
+        fn ensure<T>(_item: T)
+        where
+            T: Sync + Send,
+        {
+        }
+        ensure(Pokemon::default());
     }
 }
