@@ -1,5 +1,6 @@
 pub mod pokemon;
 pub mod search;
+pub mod store;
 
 const POKEAPI_BASE_URL: &str = "https://pokeapi.co/api/v2";
 
