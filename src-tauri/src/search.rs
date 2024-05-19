@@ -55,3 +55,20 @@ pub trait UnnamedSearch: From<SearchOption> + Default {
         }
     }
 }
+
+pub async fn get<U>(url: U) -> Result<String, crate::Errors>
+where
+    U: reqwest::IntoUrl,
+{
+    use reqwest::Client;
+
+    let client = Client::new();
+
+    let response = client.get(url).send().await?;
+
+    if !response.status().is_success() {
+        return Err(crate::Errors::NotFoundError);
+    }
+
+    Ok(response.text().await?)
+}
