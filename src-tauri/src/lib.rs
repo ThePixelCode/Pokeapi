@@ -9,3 +9,22 @@ pub struct NamedAPIResource {
     name: String,
     url: String,
 }
+
+#[derive(Debug, thiserror::Error)]
+pub enum Errors {
+    #[error("JSON Deserialize Error {0}")]
+    JSONDeserializeError(#[from] serde_json::Error),
+    #[error("Cannot Connect with API: {0}")]
+    ReqwestError(#[from] reqwest::Error),
+    #[error("Requested source was not found")]
+    NotFoundError,
+}
+
+use std::sync;
+pub trait Search {
+    type Out;
+    fn search(
+        &self,
+        store: sync::Arc<store::Store>,
+    ) -> impl std::future::Future<Output = Result<Self::Out, Errors>> + Send;
+}
