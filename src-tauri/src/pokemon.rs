@@ -63,7 +63,7 @@ pub struct PokemonSprites {
 pub struct Pokemon {
     id: u32,
     name: String,
-    base_expirence: u32,
+    base_experience: u32,
     height: u32,
     weight: u32,
     abilities: Vec<PokemonAbility>,
