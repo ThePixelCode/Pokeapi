@@ -20,11 +20,10 @@ pub enum Errors {
     NotFoundError,
 }
 
-use std::sync;
 pub trait Search {
     type Out;
-    fn search(
+    fn search<'r>(
         &self,
-        store: sync::Arc<store::Store>,
+        store: tauri::State<'r, store::Store>,
     ) -> impl std::future::Future<Output = Result<Self::Out, Errors>> + Send;
 }

@@ -98,14 +98,12 @@ impl crate::search::NamedSearch for PokemonSearch {
     }
 }
 
-use std::sync;
-
 use crate::search::NamedSearch;
 impl crate::Search for PokemonSearch {
     type Out = Pokemon;
-    async fn search(
+    async fn search<'r>(
         &self,
-        store: sync::Arc<crate::store::Store>,
+        store: tauri::State<'r, crate::store::Store>,
     ) -> Result<Self::Out, crate::Errors> {
         use serde_json::{from_str, to_string};
         if self.get_option().is_none()
