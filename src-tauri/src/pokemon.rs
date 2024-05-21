@@ -51,12 +51,12 @@ pub struct PokemonType {
 pub struct PokemonSprites {
     front_default: String,
     front_shiny: String,
-    front_female: String,
-    front_shiny_female: String,
+    front_female: Option<String>,
+    front_shiny_female: Option<String>,
     back_default: String,
     back_shiny: String,
-    back_female: String,
-    back_shiny_female: String,
+    back_female: Option<String>,
+    back_shiny_female: Option<String>,
 }
 
 #[derive(Debug, Default, PartialEq, Eq, Clone, serde::Serialize, serde::Deserialize)]
@@ -129,6 +129,7 @@ impl crate::Search for PokemonSearch {
         }
 
         if let Some(pokemon_string) = pokemon_string {
+            println!("cached!");
             return Ok(from_str::<Pokemon>(&pokemon_string)?);
         }
 
@@ -143,6 +144,8 @@ impl crate::Search for PokemonSearch {
             ))
             .await?
         };
+
+        println!("missed");
 
         let pokemon = from_str::<Pokemon>(&pokemon)?;
 
