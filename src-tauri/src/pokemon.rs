@@ -117,13 +117,27 @@ impl crate::Search for PokemonSearch {
         let mut pokemon_string = None;
 
         {
-            let mutex = store.pokemon.lock().expect(
+            let cached_pokemons = store.pokemon.lock().expect(
+                "Mutex is poisoned, which completly breaks the universe this app is suppose to work",
+            );
+            let cached_ids = store.pokemon_ids.lock().expect(
                 "Mutex is poisoned, which completly breaks the universe this app is suppose to work",
             );
 
-            if let Some(id) = self.get_id() {
-                if mutex.contains_key(id) {
-                    pokemon_string = Some(mutex.get(id).expect("None is unreachable").clone());
+            let id = if let Some(name) = self.get_name() {
+                cached_ids.get(name)
+            } else {
+                self.get_id()
+            };
+
+            if let Some(id) = id {
+                if cached_pokemons.contains_key(id) {
+                    pokemon_string = Some(
+                        cached_pokemons
+                            .get(id)
+                            .expect("None is unreachable")
+                            .clone(),
+                    );
                 }
             }
         }
@@ -150,10 +164,15 @@ impl crate::Search for PokemonSearch {
         let pokemon = from_str::<Pokemon>(&pokemon)?;
 
         {
-            let mut mutex = store.pokemon.lock().expect(
+            let mut cached_pokemon = store.pokemon.lock().expect(
                 "Mutex is poisoned, which completly breaks the universe this app is suppose to work",
             );
-            mutex.insert(pokemon.id, to_string(&pokemon)?);
+            cached_pokemon.insert(pokemon.id.clone(), to_string(&pokemon)?);
+
+            let mut cached_ids = store.pokemon_ids.lock().expect(
+                "Mutex is poisoned, which completly breaks the universe this app is suppose to work",
+            );
+            cached_ids.insert(pokemon.name.clone(), pokemon.id.clone());
         }
 
         Ok(pokemon)
