@@ -59,8 +59,8 @@ impl Default for Store {
     }
 }
 
-impl Drop for Store {
-    fn drop(&mut self) {
+impl Store {
+    pub fn save_to_disk(&self) {
         use serde_json::to_string;
 
         let cache_dir = crate::make_cache_files();

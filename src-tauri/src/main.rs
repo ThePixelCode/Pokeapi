@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use pokeapi::Search;
+use tauri::Manager;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -27,6 +28,13 @@ fn main() {
     tauri::Builder::default()
         .manage(pokeapi::store::Store::default())
         .invoke_handler(tauri::generate_handler![greet, get_pokemon])
+        .on_window_event(|e| match e.event() {
+            tauri::WindowEvent::CloseRequested { .. } => {
+                let store = e.window().state::<pokeapi::store::Store>();
+                store.save_to_disk();
+            }
+            _ => {}
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
