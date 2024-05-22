@@ -143,7 +143,7 @@ impl crate::Search for PokemonSearch {
         }
 
         if let Some(pokemon_string) = pokemon_string {
-            println!("cached!");
+            eprintln!("found on the cache!");
             return Ok(from_str::<Pokemon>(&pokemon_string)?);
         }
 
@@ -159,7 +159,7 @@ impl crate::Search for PokemonSearch {
             .await?
         };
 
-        println!("missed");
+        eprintln!("cache missed searching on server");
 
         let pokemon = from_str::<Pokemon>(&pokemon)?;
 
