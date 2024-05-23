@@ -1,6 +1,8 @@
 #[derive(Debug, Clone, PartialEq, Eq, Default, serde::Serialize, serde::Deserialize)]
 pub enum SearchOption {
+    #[serde(rename = "id")]
     ID(u32),
+    #[serde(rename = "name")]
     Name(String),
     #[default]
     None,
