@@ -11,6 +11,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.6.5",
     "@tauri-apps/api": "^1"
   },
   "devDependencies": {
