@@ -20,7 +20,7 @@
     }
 </script>
 
-<div class="m-2 p-2 flex flex-row w-1/3 align-middle items-center">
+<div class="m-2 p-2 flex flex-row w-full align-middle items-center">
     <h1 class="basis-3/4">Search {searchFor} For:</h1>
     <div class="basis-1/4 m-2 grid grid-flow-col">
         <button

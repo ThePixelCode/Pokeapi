@@ -16,7 +16,7 @@
 
 <form
     on:submit|preventDefault|stopPropagation={submit}
-    class="m-2 p-3 w-1/3 bg-neutral-100 dark:bg-neutral-900"
+    class="m-2 p-3 w-full bg-neutral-100 dark:bg-neutral-900"
 >
     <div class="flex flex-row align-middle justify-items-center">
         <label for="id" class="basis-1/6 text-left">ID:</label>
