@@ -1,5 +1,5 @@
 [package]
-name = "pokeapi"
+name = "pokeapi_client"
 version = "0.1.0"
 description = "A Pokeapi Client"
 authors = ["ThePixelCode"]
