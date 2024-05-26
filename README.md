@@ -1,7 +1,15 @@
-# Tauri + Svelte + Typescript
+# Pokeapi Client
 
-This template should help get you started developing with Tauri, Svelte and TypeScript in Vite.
+This is a Pokeapi client made as a side project. Using it seriously is not recommended.
 
-## Recommended IDE Setup
+## How to run
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+To run do:
+
+1. Install [Tauri](https://tauri.app/).
+
+2. Run `npm i`.
+
+3. To run in dev mode run `cargo tauri dev`.
+
+4. To build `cargo tauri build`
