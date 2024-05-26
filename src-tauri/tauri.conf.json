@@ -29,7 +29,14 @@
     },
     "bundle": {
       "active": true,
-      "targets": "all",
+      "targets": [
+        "deb",
+        "app",
+        "dmg",
+        "msi",
+        "nsis",
+        "updater"
+      ],
       "identifier": "io.github.thepixelcode",
       "icon": [
         "icons/32x32.png",
